@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package beerpb;
+
+option go_package = "example.com/hounddog-test-go-app/proto/beerpb";
+
+message Beer {
+  string id = 1;
+  string name = 2;
+  string style = 3;
+  double abv = 4;
+}
+
+message CreateBeerRequest {
+  Beer beer = 1;
+}
+
+message GetBeerRequest {
+  string id = 1;
+}
+
+message DeleteBeerRequest {
+  string id = 1;
+}
+
+message BeerResponse {
+  Beer beer = 1;
+}
+
+message ListBeersRequest {}
+
+message ListBeersResponse {
+  repeated Beer beers = 1;
+}
+
+service BeerService {
+  rpc CreateBeer(CreateBeerRequest) returns (BeerResponse);
+  rpc GetBeer(GetBeerRequest) returns (BeerResponse);
+  rpc ListBeers(ListBeersRequest) returns (ListBeersResponse);
+  rpc DeleteBeer(DeleteBeerRequest) returns (BeerResponse);
+}
