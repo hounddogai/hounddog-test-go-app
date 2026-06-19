@@ -1,0 +1,30 @@
+name: Run HoundDog.ai Scan
+on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        type: boolean
+        default: false
+        description: Enable debug mode
+  push:
+    branches:
+    - main
+jobs:
+  hounddog:
+    name: Run HoundDog.ai Scan
+    runs-on: dev-us-east-1-ubuntu-arm64
+    permissions:
+      contents: read
+      security-events: write
+    container:
+      image: hounddogai/hounddog:staging
+      options: --pull=always
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@master
+    - name: Run HoundDog.ai Scan
+      env:
+        HOUNDDOG_API_KEY: ${{ secrets.HOUNDDOG_API_KEY }}
+      run: hounddog scan ${{ inputs.debug && '--debug' || '' }}
+      continue-on-error: true
