@@ -9,15 +9,20 @@ on:
   push:
     branches:
     - main
+  schedule:
+  - cron: 0 9 * * 1
+  pull_request:
+    branches:
+    - main
 jobs:
   hounddog:
     name: Run HoundDog.ai Scan
-    runs-on: dev-us-east-1-ubuntu-arm64
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
     container:
-      image: hounddogai/hounddog:staging
+      image: hounddogai/hounddog
       options: --pull=always
     if: (github.actor != 'dependabot[bot]')
     steps:
